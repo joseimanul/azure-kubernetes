@@ -32,6 +32,13 @@ steps:
 
 - task: TerraformCLI@0
   inputs:
+    command: 'forceunlock'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes/'
+    allowTelemetryCollection: true
+    lockID: 'c9ba820a-5ffe-e998-45c0-97ae98be5f5f'
+
+- task: TerraformCLI@0
+  inputs:
     command: 'apply'
     workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes/'
     environmentServiceName: 'ServiceStudyConecctionK8S'
