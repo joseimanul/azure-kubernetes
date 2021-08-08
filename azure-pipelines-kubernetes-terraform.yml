@@ -30,12 +30,6 @@ steps:
     backendAzureRmKey: 'kubernetes.tfstate'
     allowTelemetryCollection: true
 
-- task: TerraformCLI@0
-  inputs:
-    command: 'forceunlock'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/configuration/iaac/azure/kubernetes/'
-    allowTelemetryCollection: true
-    lockID: 'c9ba820a-5ffe-e998-45c0-97ae98be5f5f'
 
 - task: TerraformCLI@0
   inputs:
