@@ -16,8 +16,7 @@ steps:
 - task: DownloadSecureFile@1
   name: public_key
   inputs:
-    secureFile: 'azure_sra.pub'
-    socketTimeout: '100'
+    secureFile: 'azure_sra.pub'    
 
 - task: TerraformCLI@0
   inputs:
