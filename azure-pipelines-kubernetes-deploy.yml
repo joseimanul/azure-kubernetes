@@ -1,0 +1,54 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: 56 #'$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    # - task: Docker@2
+    #   displayName: Build an image
+    #   inputs:
+    #     containerRegistry: 'DockerHubConnection'
+    #     repository: 'joseimanul/azure-kubernetes'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '**/Dockerfile'
+    #     tags: '$(tag)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifests'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: Deploy image
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'manifests'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'kubernetesTestConnection'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/deployment.yaml'
+        containers: 'joseimanul/azure-kubernetes:${tag}'
