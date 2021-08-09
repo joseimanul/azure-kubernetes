@@ -24,6 +24,11 @@ stages:
     #     command: 'buildAndPush'
     #     Dockerfile: '**/Dockerfile'
     #     tags: '$(tag)'
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - task: PublishBuildArtifacts@1
       inputs:
@@ -50,5 +55,5 @@ stages:
         action: 'deploy'
         kubernetesServiceConnection: 'kubernetesTestConnection'
         namespace: 'default'
-        manifests: '$(System.ArtifactsDirectory)/deployment.yaml'
-        containers: 'joseimanul/azure-kubernetes:${tag}'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
+        containers: 'joseimanul/azure-kubernetes:$(tag)'
